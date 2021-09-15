@@ -3,137 +3,144 @@
 * SPDX-License-Identifier: Apache-2.0
 **********************************************************************/
 
-import { CIM_ManagedElement, CIM_SettingData, CIM_EthernetPort, CIM_BootSettingData } from './cim_models'
+import { CIM_ManagedElement, CIM_SettingData, CIM_EthernetPort, CIM_BootSettingData, CIM_Credential } from './cim_models'
 
 export interface amtAuthenticateObject {
-  nonce?: number[]
-  uuid?: string[]
-  fqdn?: string
-  fwVersion?: string
-  amtSvn?: number
-  signatureMechanism?: number
-  signature?: number[]
-  lengthOfCertificates?: number[]
-  certificates?: number[]
+  Nonce?: number[]
+  UUID?: string[]
+  FQDN?: string
+  FWVersion?: string
+  AMTSVN?: number
+  SignatureMechanism?: number
+  Signature?: number[]
+  LengthOfCertificates?: number[]
+  Certificates?: number[]
 }
 
 export interface AMT_GeneralSettings extends CIM_SettingData<AMT_GeneralSettings> {
-  networkInterfaceEnabled?: boolean
-  digestRealm?: string
-  idleWakeTimeout?: number
-  hostName?: string
-  domainName?: string
-  pingResponseEnabled?: boolean
-  wsmanOnlyMode?: boolean
-  preferredAddressFamily?: number
-  dhcpv6ConfigurationTimeout?: number
-  ddnsUpdateByDHCPServerEnabled?: boolean
-  sharedFQDN?: boolean
-  hostOSFQDN?: string
-  ddnsttl?: number
-  amtNetworkEnabled?: number
-  rmcpPingResponseEnabled?: boolean
-  ddnsPeriodicUpdateInterval?: number
-  presenceNotificationInterval?: number
-  privacyLevel?: number
-  powerSource?: number
-  thunderboltDockEnabled?: number
-  amtAuthenticate?: (mcNonce: number) => amtAuthenticateObject
+  NetworkInterfaceEnabled?: boolean
+  DigestRealm?: string
+  IdleWakeTimeout?: number
+  HostName?: string
+  DomainName?: string
+  PingResponseEnabled?: boolean
+  WsmanOnlyMode?: boolean
+  PreferredAddressFamily?: number
+  DHCPv6ConfigurationTimeout?: number
+  DDNSUpdateByDHCPServerEnabled?: boolean
+  SharedFQDN?: boolean
+  HostOSFQDN?: string
+  DDNSTTL?: number
+  AMTNetworkEnabled?: number
+  RmcpPingResponseEnabled?: boolean
+  DDNSPeriodicUpdateInterval?: number
+  PresenceNotificationInterval?: number
+  PrivacyLevel?: number
+  PowerSource?: number
+  ThunderboltDockEnabled?: number
+  amtAuthenticate?: (mcNonce: number[]) => amtAuthenticateObject
 }
 
 export interface AMT_EthernetPortSettings extends CIM_SettingData<AMT_EthernetPortSettings> {
-  vlanTag?: number
-  sharedMAC?: boolean
-  macAddress?: string
-  linkIsUp?: boolean
-  linkPolicy?: number[]
-  linkPreference?: number
-  linkControl?: number
-  sharedStaticIp?: boolean
-  sharedDynamicIp?: boolean
-  ipSyncEnabled?: boolean
-  dhcpEnabled?: boolean
-  ipAddress?: string
-  subnetMask?: string
-  defaultGateway?: string
-  primaryDNS?: string
-  secondaryDNS?: string
-  consoleTcpMaxRetransmissions?: number
-  wlanLinkProtectionLevel?: number
-  physicalConnectionType?: number
-  physicalNicMedium?: number
+  SharedMAC?: boolean
+  MACAddress?: string
+  LinkIsUp?: boolean
+  LinkPolicy?: number[]
+  LinkPreference?: number
+  LinkControl?: number
+  SharedStaticIp?: boolean
+  SharedDynamicIP?: boolean
+  IpSyncEnabled?: boolean
+  DHCPEnabled?: boolean
+  IPAddress?: string
+  SubnetMask?: string
+  DefaultGateway?: string
+  PrimaryDNS?: string
+  SecondaryDNS?: string
+  ConsoleTcpMaxRetransmissions?: number
+  WLANLinkProtectionLevel?: number
+  PhysicalConnectionType?: number
+  PhysicalNicMedium?: number
   setLinkPreferences?: (linkPreference: number, timeout: number) => number
   cancelLinkProtection?: () => number
   restoreLinkProtection?: () => number
 }
 
 export interface MPServer {
-  accessInfo?: string
-  infoFormat?: number
-  port?: number
-  authMethod?: number
-  username?: string
-  password?: string
-  commonName?: string
+  AccessInfo?: string
+  InfoFormat?: number
+  Port?: number
+  AuthMethod?: number
+  Certificate?: AMT_PublicKeyCertificate
+  Username?: string
+  Password?: string
+  CommonName?: string
 }
 
 export interface RemoteAccessPolicyRule {
-  trigger?: number
-  tunnelLifeTime?: number
-  extendedData?: string
+  Trigger?: number
+  TunnelLifeTime?: number
+  ExtendedData?: string
 }
 
 export interface AMT_EnvironmentDetectionSettingData extends CIM_SettingData<AMT_EnvironmentDetectionSettingData> {
-  detectionAlgorithm?: number
-  detectionStrings?: string[]
-  detectionIPv6LocalPrefixes?: string[]
+  DetectionAlgorithm?: number
+  DetectionStrings?: string[]
+  DetectionIPv6LocalPrefixes?: string[]
   setSystemDefensePolicy?: (policy: AMT_SystemDefencePolicy) => number
   enableVpnRouting?: (enable: boolean) => number
 }
 
 export interface AMT_SystemDefencePolicy extends CIM_ManagedElement<AMT_SystemDefencePolicy> {
-  policyName?: string
-  policyPrecedence?: number
-  antiSpoofingSupport?: number
-  filterCreationHandles?: number[]
-  txDefaultDrop?: boolean
-  txDefaultMatchEvent?: boolean
-  txDefaultCount?: boolean
-  rxDefaultDrop?: boolean
-  rxDefaultMatchEvent?: boolean
-  rxDefaultCount?: boolean
+  PolicyName?: string
+  PolicyPrecedence?: number
+  AntiSpoofingSupport?: number
+  FilterCreationHandles?: number[]
+  TxDefaultDrop?: boolean
+  TxDefaultMatchEvent?: boolean
+  TxDefaultCount?: boolean
+  RxDefaultDrop?: boolean
+  RxDefaultMatchEvent?: boolean
+  RxDefaultCount?: boolean
   getTimeout?: () => number
   setTimeout?: (number) => number
   updateStatistics?: (networkInterface: CIM_EthernetPort, resetOnRead: boolean) => number
 }
 
 export interface AMT_BootSettingData extends CIM_BootSettingData<AMT_BootSettingData> {
-  useSOL?: boolean
-  useSafeMode?: boolean
-  reflashBIOS?: boolean
-  biosSetup?: boolean
-  biosPause?: boolean
-  lockPowerButton?: boolean
-  lockResetButton?: boolean
-  lockKeyboard?: boolean
-  lockSleepButton?: boolean
-  userPasswordBypass?: boolean
-  forcedProgressEvents?: boolean
-  firmwareVerbosity?: number
-  configurationDataReset?: boolean
-  iderBootDevice?: number
-  useIDER?: boolean
-  enforceSecureBoot?: boolean
-  bootMediaIndex?: number
-  secureErase?: boolean
-  rsePassword?: string
-  optionsCleared?: boolean
-  winREBootEnabled?: boolean
-  uefiLocalPBABootEnabled?: boolean
-  uefiHTTPSBootEnabled?: boolean
-  secureBootControlEnabled?: boolean
-  bootguardStatus?: boolean
-  biosLastStatus?: number[]
-  uefiBootParametersArray?: number[]
-  uefiBootNumberOfParams?: number[]
+  UseSOL?: boolean
+  UseSafeMode?: boolean
+  ReflashBIOS?: boolean
+  BIOSSetup?: boolean
+  BIOSPause?: boolean
+  LockPowerButton?: boolean
+  LockResetButton?: boolean
+  LockKeyboard?: boolean
+  LockSleepButton?: boolean
+  UserPasswordBypass?: boolean
+  ForcedProgressEvents?: boolean
+  FirmwareVerbosity?: number
+  ConfigurationDataReset?: boolean
+  IDERBootDevice?: number
+  UseIDER?: boolean
+  EnforceSecureBoot?: boolean
+  BootMediaIndex?: number
+  SecureErase?: boolean
+  RSEPassword?: string
+  OptionsCleared?: boolean
+  WinREBootEnabled?: boolean
+  UEFILocalPBABootEnabled?: boolean
+  UEFIHTTPSBootEnabled?: boolean
+  SecureBootControlEnabled?: boolean
+  BootguardStatus?: boolean
+  BIOSLastStatus?: number[]
+  UEFIBootParametersArray?: number[]
+  UEFIBootNumberOfParams?: number[]
+}
+
+export interface AMT_PublicKeyCertificate extends CIM_Credential<AMT_PublicKeyCertificate> {
+  X509Certificate?: any
+  TrustedRootCertificate?: boolean
+  Issuer?: string
+  Subject?: string
 }

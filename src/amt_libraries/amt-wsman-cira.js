@@ -250,6 +250,7 @@ function CreateWsmanComm(host, port, user, pass, tls, parent) {
     function _Send(x) {
         if (obj.socketState == 2 && obj.socket != null) {
             try {
+                console.log(x)
                 obj.socket.write(x);
             } catch (e) {
                 obj.Error(e);
