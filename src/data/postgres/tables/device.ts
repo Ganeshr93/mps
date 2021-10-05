@@ -40,7 +40,8 @@ export class DeviceTable implements IDeviceTable {
       mpsinstance as "mpsInstance",
       connectionstatus as "connectionStatus",
       mpsusername as "mpsusername",
-      tenantid as "tenantId"
+      tenantid as "tenantId",
+      tls_cert_version as "tlsCertVersion"
     FROM devices
     WHERE tenantid = $3 
     ORDER BY guid 
@@ -62,7 +63,8 @@ export class DeviceTable implements IDeviceTable {
       mpsinstance as "mpsInstance",
       connectionstatus as "connectionStatus",
       mpsusername as "mpsusername",
-      tenantid as "tenantId"
+      tenantid as "tenantId",
+      tls_cert_version as "tlsCertVersion"
     FROM devices 
     WHERE guid = $1 and tenantid = $2`, [guid, tenantId])
 
@@ -80,7 +82,8 @@ export class DeviceTable implements IDeviceTable {
         mpsinstance as "mpsInstance",
         connectionstatus as "connectionStatus",
         mpsusername as "mpsusername",
-        tenantid as "tenantId" 
+        tenantid as "tenantId",
+        tls_cert_version as "tlsCertVersion" 
       FROM devices 
       WHERE tags @> $1 and tenantId = $4
       ORDER BY guid 
@@ -94,7 +97,8 @@ export class DeviceTable implements IDeviceTable {
         mpsinstance as "mpsInstance",
         connectionstatus as "connectionStatus",
         mpsusername as "mpsusername",
-        tenantid as "tenantId" 
+        tenantid as "tenantId",
+        tls_cert_version as "tlsCertVersion" 
       FROM devices 
       WHERE tags && $1 and tenantId = $4
       ORDER BY guid 
@@ -121,7 +125,7 @@ export class DeviceTable implements IDeviceTable {
   async insert (device: Device): Promise<Device> {
     try {
       const results = await this.db.query(`
-      INSERT INTO devices(guid, hostname, tags, mpsinstance, connectionstatus, mpsusername, tenantid) 
+      INSERT INTO devices(guid, hostname, tags, mpsinstance, connectionstatus, mpsusername, tenantid, tls_cert_version) 
       values($1, $2, ARRAY(SELECT json_array_elements_text($3)), $4, $5, $6, $7)`,
       [
         device.guid,
@@ -130,7 +134,8 @@ export class DeviceTable implements IDeviceTable {
         device.mpsInstance,
         device.connectionStatus,
         device.mpsusername,
-        device.tenantId
+        device.tenantId,
+        device.tlsCertVersion
       ])
       if (results.rowCount > 0) {
         return await this.getByName(device.guid)
@@ -154,7 +159,7 @@ export class DeviceTable implements IDeviceTable {
     try {
       const results = await this.db.query(`
       UPDATE devices 
-      SET tags=$2, hostname=$3, mpsinstance=$4, connectionstatus=$5, mpsusername=$6 
+      SET tags=$2, hostname=$3, mpsinstance=$4, connectionstatus=$5, mpsusername=$6, tls_cert_version=$8 
       WHERE guid=$1 and tenantid = $7`,
       [
         device.guid,
@@ -163,7 +168,8 @@ export class DeviceTable implements IDeviceTable {
         device.mpsInstance,
         device.connectionStatus,
         device.mpsusername,
-        device.tenantId
+        device.tenantId,
+        device.tlsCertVersion
       ])
       if (results.rowCount > 0) {
         return await this.getByName(device.guid)

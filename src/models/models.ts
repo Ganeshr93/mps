@@ -10,6 +10,7 @@ export interface Device {
   mpsusername: string
   tags: string[]
   tenantId: string
+  tlsCertVersion: number
 }
 export interface Credentials {
   [key: string]: AMTCredential

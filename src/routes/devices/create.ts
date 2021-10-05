@@ -17,6 +17,7 @@ export async function insertDevice (req: Request, res: Response): Promise<void> 
       device.connectionStatus = device.connectionStatus ?? false
       device.mpsusername = req.body.mpsusername ?? device.mpsusername
       device.tenantId = req.body.tenantId ?? ''
+      device.tlsCertVersion = req.body.tlsCertVersion ?? device.tlsCertVersion
       const results = await req.db.devices.update(device)
       res.status(200).json(results)
     } else {
@@ -27,7 +28,8 @@ export async function insertDevice (req: Request, res: Response): Promise<void> 
         tags: req.body.tags ?? null,
         mpsusername: req.body.mpsusername,
         mpsInstance: null,
-        tenantId: req.body.tenantId ?? ''
+        tenantId: req.body.tenantId ?? '',
+        tlsCertVersion: req.body.tlsCertVersion
       }
       const results = await req.db.devices.insert(device)
       res.status(201).json(results)

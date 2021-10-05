@@ -15,5 +15,6 @@ CREATE TABLE IF NOT EXISTS devices(
       mpsusername text,
       tenantid varchar(36),
       CONSTRAINT device_guid UNIQUE(guid),
+      tls_cert_version integer,
       PRIMARY KEY (guid,tenantid)
     ); 
