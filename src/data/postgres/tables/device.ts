@@ -126,7 +126,7 @@ export class DeviceTable implements IDeviceTable {
     try {
       const results = await this.db.query(`
       INSERT INTO devices(guid, hostname, tags, mpsinstance, connectionstatus, mpsusername, tenantid, tls_cert_version) 
-      values($1, $2, ARRAY(SELECT json_array_elements_text($3)), $4, $5, $6, $7)`,
+      values($1, $2, ARRAY(SELECT json_array_elements_text($3)), $4, $5, $6, $7, $8)`,
       [
         device.guid,
         device.hostname,

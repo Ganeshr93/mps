@@ -29,7 +29,7 @@ export async function insertDevice (req: Request, res: Response): Promise<void> 
         mpsusername: req.body.mpsusername,
         mpsInstance: null,
         tenantId: req.body.tenantId ?? '',
-        tlsCertVersion: req.body.tlsCertVersion
+        tlsCertVersion: req.body.tlsCertVersion ?? null
       }
       const results = await req.db.devices.insert(device)
       res.status(201).json(results)
