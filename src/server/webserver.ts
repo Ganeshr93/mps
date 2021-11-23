@@ -9,20 +9,16 @@
 * @version v0.2.0c
 */
 
-import { Socket } from 'net'
-import { connect } from 'tls'
+import { Server } from 'net'
 import express, { Request } from 'express'
 import { createServer } from 'http'
 import jws from 'jws'
 import { configType, certificatesType } from '../models/Config'
 import { ErrorResponse } from '../utils/amtHelper'
-import { logger as log } from '../utils/logger'
-import { constants } from 'crypto'
+import { logger } from '../utils/logger'
 import { MPSMicroservice } from '../mpsMicroservice'
 import AMTStackFactory from '../amt_libraries/amt-connection-factory'
 import routes from '../routes'
-
-import { CreateHttpInterceptor, CreateRedirInterceptor } from '../utils/interceptor'
 import WebSocket from 'ws'
 import { URL } from 'url'
 import cors from 'cors'
@@ -33,7 +29,7 @@ import { WSRelay } from './WSRelay'
 export class WebServer {
   db: IDB
   app: express.Express
-  server = null
+  server: Server = null
   relaywss: WebSocket.Server = null
   mpsService: MPSMicroservice
   config: configType
@@ -59,6 +55,7 @@ export class WebServer {
         next()
       })
 
+      // set up routes and attach some middleware
       this.app.use('/api/v1', async (req: Request, res, next) => {
         req.mpsService = this.mpsService
         const newDB = new DbCreatorFactory(this.mpsService.config)
@@ -72,27 +69,25 @@ export class WebServer {
         this.handleUpgrade(request, socket, head)
       })
 
-      // Validate port number
-      let port = 3000
-      if (this.config.web_port != null) {
-        port = this.config.web_port
-      }
-
       // Start the ExpressJS web server
-      this.server.listen(port, () => {
-        log.info(`MPS Microservice running on ${this.config.common_name}:${port}.`)
-      }).on('error', function (err) {
-        if (err.code === 'EADDRINUSE' || err.code === 'EACCES') {
-          log.error('Chosen web port is invalid or not available')
-        } else {
-          log.error(err)
-        }
-        process.exit(0)
-      })
+      this.server.listen(this.config.web_port || 3000, this.onListenSuccess).on('error', this.onListenError)
     } catch (error) {
-      log.error(`Exception in webserver: ${error}`)
+      logger.error(`Exception in webserver: ${error}`)
       process.exit(0)
     }
+  }
+
+  onListenSuccess (): void {
+    logger.info(`MPS Microservice running on ${this.config.common_name}:${this.config.web_port || 3000}.`)
+  }
+
+  onListenError (err): void {
+    if (err.code === 'EADDRINUSE' || err.code === 'EACCES') {
+      logger.error('Chosen web port is invalid or not available')
+    } else {
+      logger.error(err)
+    }
+    process.exit(0)
   }
 
   // Handle Upgrade - WebSocket
@@ -115,12 +110,12 @@ export class WebServer {
           return true
         }
       }
-      const wssRelay = new WSRelay(options)
+      const wssRelay = new WSRelay(options, this.mpsService.secrets)
       wssRelay.server.handleUpgrade(request, socket, head, (ws) => {
         wssRelay.server.emit('connection', ws, request)
       })
     } else { // Invalid endpoint
-      log.debug('Route does not exist. Closing connection...')
+      logger.debug('Route does not exist. Closing connection...')
       socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n')
       socket.destroy()
     }

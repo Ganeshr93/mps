@@ -48,10 +48,6 @@ export class MPSMicroservice {
       MqttProvider.publishEvent('fail', ['CIRA_Connected'], 'CIRA Connection Failed', guid)
       log.error(`Failed to update CIRA Connection established status in DB ${guid}`)
     }
-
-    if (this.webserver) {
-      this.webserver.notifyUsers({ host: guid, event: 'node_connection', status: 'connected' })
-    }
   }
 
   async CIRADisconnected (guid: string): Promise<void> {
@@ -68,13 +64,7 @@ export class MPSMicroservice {
     if (guid && this.mpsComputerList[guid]) {
       log.verbose(`delete mpsComputerList[${guid}]`)
       delete this.mpsComputerList[guid]
-      if (this.webserver) {
-        this.webserver.notifyUsers({
-          host: guid,
-          event: 'node_connection',
-          status: 'disconnected'
-        })
-      }
+
       MqttProvider.publishEvent('fail', ['CIRA_Disconnected'], 'CIRA Connection Disconnected', guid)
       log.debug(`CIRA connection disconnected for device : ${guid}`)
     }
