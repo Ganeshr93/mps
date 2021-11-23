@@ -2,8 +2,7 @@
  * Copyright (c) Intel Corporation 2021
  * SPDX-License-Identifier: Apache-2.0
  **********************************************************************/
-import { request } from 'http'
-import { RequestOptions } from 'https'
+import { request, RequestOptions } from 'http'
 
 const options: RequestOptions = {
   host: 'localhost',
