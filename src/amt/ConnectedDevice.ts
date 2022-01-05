@@ -1,14 +1,13 @@
 import { CIRASocket } from '../models/models'
 import { AMT, CIM, IPS, Common } from '@open-amt-cloud-toolkit/wsman-messages/dist/index'
 import { HttpHandler } from './HttpHandler'
-import { CIRAChannel, CIRAHandler } from './CIRAHandler'
+import { CIRAHandler } from './CIRAHandler'
 import { logger } from '../utils/logger'
 
 export class ConnectedDevice {
   isConnected: boolean = false
   httpHandler: HttpHandler
   ciraHandler: CIRAHandler
-  ciraChannel: CIRAChannel
   ciraSocket: CIRASocket
   messageId: number = 0
   cim: CIM.CIM
@@ -40,6 +39,7 @@ export class ConnectedDevice {
   async getSoftwareIdentity (): Promise<Common.Models.Pull<CIM.Models.SoftwareIdentity>> {
     let xmlRequestBody = this.cim.SoftwareIdentity(CIM.Methods.ENUMERATE, (this.messageId++).toString())
     const result = await this.ciraHandler.Enumerate(this.ciraSocket, xmlRequestBody)
+    console.log('getSoftwareIdentity result :', JSON.stringify(result, null, '\t'))
     const enumContext: string = result?.Envelope.Body?.EnumerateResponse?.EnumerationContext
     if (enumContext == null) {
       logger.error('failed to pull CIM_SoftwareIdentity in get version')
@@ -47,6 +47,7 @@ export class ConnectedDevice {
     }
     xmlRequestBody = this.cim.SoftwareIdentity(CIM.Methods.PULL, (this.messageId++).toString(), enumContext)
     const pullResponse = await this.ciraHandler.Pull<CIM.Models.SoftwareIdentity>(this.ciraSocket, xmlRequestBody)
+    console.log('getSoftwareIdentity pullResponse :', JSON.stringify(pullResponse, null, '\t'))
     return pullResponse.Envelope.Body
   }
 
@@ -164,6 +165,7 @@ export class ConnectedDevice {
   async getComputerSystemPackage (): Promise<Common.Models.Envelope<CIM.Models.ComputerSystemPackage>> {
     const xmlRequestBody = this.cim.ComputerSystemPackage(CIM.Methods.GET, (this.messageId++).toString())
     const getResponse = await this.ciraHandler.Get<CIM.Models.ComputerSystemPackage>(this.ciraSocket, xmlRequestBody)
+    console.log('getComputerSystemPackage getResponse :', JSON.stringify(getResponse, null, '\t'))
     return getResponse.Envelope
   }
 

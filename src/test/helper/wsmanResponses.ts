@@ -65,39 +65,40 @@ export const generalSettings = {
   Envelope: {
     Header: {
       To: 'http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous',
-      RelatesTo: '0',
+      RelatesTo: 0,
       Action: 'http://schemas.xmlsoap.org/ws/2004/09/transfer/GetResponse',
       MessageID: 'uuid:00000000-8086-8086-8086-000000000001',
       ResourceURI: 'http://intel.com/wbem/wscim/1/amt-schema/1/AMT_GeneralSettings'
     },
     Body: {
       AMT_GeneralSettings: {
-        AMTNetworkEnabled: '1',
-        DDNSPeriodicUpdateInterval: '1440',
-        DDNSTTL: '900',
-        DDNSUpdateByDHCPServerEnabled: 'true',
-        DDNSUpdateEnabled: 'false',
-        DHCPv6ConfigurationTimeout: '0',
+        AMTNetworkEnabled: 1,
+        DDNSPeriodicUpdateInterval: 1440,
+        DDNSTTL: 900,
+        DDNSUpdateByDHCPServerEnabled: true,
+        DDNSUpdateEnabled: false,
+        DHCPv6ConfigurationTimeout: 0,
         DigestRealm: 'Digest:A3829B3827DE4D33D4449B366831FD01',
         DomainName: '',
         ElementName: 'Intel(r) AMT: General Settings',
         HostName: '',
         HostOSFQDN: 'DESKTOP-9CC12U7',
-        IdleWakeTimeout: '1',
+        IdleWakeTimeout: 1,
         InstanceID: 'Intel(r) AMT: General Settings',
-        NetworkInterfaceEnabled: 'true',
-        PingResponseEnabled: 'true',
-        PowerSource: '0',
-        PreferredAddressFamily: '0',
-        PresenceNotificationInterval: '0',
-        PrivacyLevel: '0',
-        RmcpPingResponseEnabled: 'true',
-        SharedFQDN: 'true',
-        ThunderboltDockEnabled: '0',
-        WsmanOnlyMode: 'false'
+        NetworkInterfaceEnabled: true,
+        PingResponseEnabled: true,
+        PowerSource: 0,
+        PreferredAddressFamily: 0,
+        PresenceNotificationInterval: 0,
+        PrivacyLevel: 0,
+        RmcpPingResponseEnabled: true,
+        SharedFQDN: true,
+        ThunderboltDockEnabled: 0,
+        WsmanOnlyMode: false
       }
     }
-  }
+  },
+  statusCode: 200
 }
 
 export const startOptInResponse = {
