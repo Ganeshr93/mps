@@ -4,33 +4,30 @@ import Common from './common'
 import { Environment } from './Environment'
 import { AuthenticationStatus, AuthenticationType, RedirectCommands, RedirectInterceptor, StartRedirectionSessionReplyStatus } from './redirectInterceptor'
 
-// let httpInterceptor: HttpInterceptor = null
 Environment.Config = config
-// beforeEach(() => {
-//   const args: Args = {
-//     user: 'admin',
-//     pass: 'Intel!123',
-//     host: 'localhost',
-//     port: 1234
-//   }
-//   httpInterceptor = new HttpInterceptor(args)
-// })
+
+let interceptor: RedirectInterceptor = null
+
+const args: Args = {
+  user: 'admin',
+  pass: 'P@ssw0rd',
+  host: 'localhost',
+  port: 1234
+}
+
+beforeEach(() => {
+  interceptor = new RedirectInterceptor(args)
+})
 
 afterEach(() => {
   jest.clearAllMocks()
+  interceptor = null
 })
 
 test('processAmtData', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-  const httpInterceptor = new RedirectInterceptor(args)
-  jest.spyOn(httpInterceptor, 'processAmtDataEx').mockReturnValueOnce('hello world!!!')
+  jest.spyOn(interceptor, 'processAmtDataEx').mockReturnValueOnce('hello world!!!')
 
-  const result = httpInterceptor.processAmtData('12345')
+  const result = interceptor.processAmtData('12345')
   expect(result).toBe('hello world!!!')
 })
 
@@ -59,13 +56,6 @@ test('processAmtData', () => {
 // }
 
 test('test header mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -82,23 +72,15 @@ test('test header mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSessionReply').mockReturnValueOnce('handleStartRedirectionSessionReply')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSessionReply').mockReturnValueOnce('handleAuthenticateSessionReply')
+  interceptor.amt = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSessionReply').mockReturnValueOnce('handleStartRedirectionSessionReply')
+  jest.spyOn(interceptor, 'handleAuthenticateSessionReply').mockReturnValueOnce('handleAuthenticateSessionReply')
 
-  const result = redirectInterceptor.processAmtDataEx()
+  const result = interceptor.processAmtDataEx()
   expect(result).toBe('')
 })
 
 test('direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -115,24 +97,16 @@ test('direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSessionReply').mockReturnValueOnce('handleStartRedirectionSessionReply')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSessionReply').mockReturnValueOnce('handleAuthenticateSessionReply')
+  interceptor.amt = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSessionReply').mockReturnValueOnce('handleStartRedirectionSessionReply')
+  jest.spyOn(interceptor, 'handleAuthenticateSessionReply').mockReturnValueOnce('handleAuthenticateSessionReply')
 
-  const result = redirectInterceptor.processAmtDataEx()
+  const result = interceptor.processAmtDataEx()
   expect(result).toBe('abcdefghij1234567890')
   expect(connection.acc).toBe('')
 })
 
 test('direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -149,23 +123,15 @@ test('direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSessionReply').mockReturnValueOnce('handleStartRedirectionSessionReply')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSessionReply').mockReturnValueOnce('handleAuthenticateSessionReply')
+  interceptor.amt = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSessionReply').mockReturnValueOnce('handleStartRedirectionSessionReply')
+  jest.spyOn(interceptor, 'handleAuthenticateSessionReply').mockReturnValueOnce('handleAuthenticateSessionReply')
 
-  const result = redirectInterceptor.processAmtDataEx()
+  const result = interceptor.processAmtDataEx()
   expect(result).toBe('handleStartRedirectionSessionReply')
 })
 
 test('direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -182,23 +148,15 @@ test('direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSessionReply').mockReturnValueOnce('handleStartRedirectionSessionReply')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSessionReply').mockReturnValueOnce('handleAuthenticateSessionReply')
+  interceptor.amt = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSessionReply').mockReturnValueOnce('handleStartRedirectionSessionReply')
+  jest.spyOn(interceptor, 'handleAuthenticateSessionReply').mockReturnValueOnce('handleAuthenticateSessionReply')
 
-  const result = redirectInterceptor.processAmtDataEx()
+  const result = interceptor.processAmtDataEx()
   expect(result).toBe('handleAuthenticateSessionReply')
 })
 
 test('direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -215,12 +173,11 @@ test('direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSessionReply').mockReturnValueOnce('handleStartRedirectionSessionReply')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSessionReply').mockReturnValueOnce('handleAuthenticateSessionReply')
+  interceptor.amt = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSessionReply').mockReturnValueOnce('handleStartRedirectionSessionReply')
+  jest.spyOn(interceptor, 'handleAuthenticateSessionReply').mockReturnValueOnce('handleAuthenticateSessionReply')
 
-  const result = redirectInterceptor.processAmtDataEx()
+  const result = interceptor.processAmtDataEx()
   expect(result).toBe('')
   expect(connection.error).toBeTruthy()
 })
@@ -238,13 +195,6 @@ test('direct mode', () => {
 // }
 
 test('direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -261,21 +211,13 @@ test('direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
+  interceptor.amt = connection
 
-  const result = redirectInterceptor.handleStartRedirectionSessionReply()
+  const result = interceptor.handleStartRedirectionSessionReply()
   expect(result).toBe('')
 })
 
 test('direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -292,21 +234,13 @@ test('direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
+  interceptor.amt = connection
 
-  const result = redirectInterceptor.handleStartRedirectionSessionReply()
+  const result = interceptor.handleStartRedirectionSessionReply()
   expect(result).toBeUndefined()
 })
 
 test('direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -323,21 +257,13 @@ test('direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
+  interceptor.amt = connection
 
-  const result = redirectInterceptor.handleStartRedirectionSessionReply()
+  const result = interceptor.handleStartRedirectionSessionReply()
   expect(result).toBeUndefined()
 })
 
 test('direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -354,21 +280,13 @@ test('direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
+  interceptor.amt = connection
 
-  const result = redirectInterceptor.handleStartRedirectionSessionReply()
+  const result = interceptor.handleStartRedirectionSessionReply()
   expect(result).toBe('')
 })
 
 test('direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -385,21 +303,13 @@ test('direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
+  interceptor.amt = connection
 
-  const result = redirectInterceptor.handleStartRedirectionSessionReply()
+  const result = interceptor.handleStartRedirectionSessionReply()
   expect(result).toBe('')
 })
 
 test('direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -416,10 +326,9 @@ test('direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
+  interceptor.amt = connection
 
-  const result = redirectInterceptor.handleStartRedirectionSessionReply()
+  const result = interceptor.handleStartRedirectionSessionReply()
   expect(result).toBe(`0${String.fromCharCode(StartRedirectionSessionReplyStatus.SUCCESS)}123456789A${String.fromCharCode(0)}`)
   expect(connection.acc).toBe('')
 })
@@ -432,13 +341,6 @@ test('direct mode', () => {
 //   const authType = this.amt.acc.charCodeAt(4)
 
 test('acc length less than 9', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -455,22 +357,14 @@ test('acc length less than 9', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
+  interceptor.amt = connection
 
-  const result = redirectInterceptor.handleAuthenticateSessionReply()
+  const result = interceptor.handleAuthenticateSessionReply()
   expect(result).toBe('')
   expect(connection.acc).toBe('01234567')
 })
 
 test('acc length less than 9 + l', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -487,22 +381,14 @@ test('acc length less than 9 + l', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
+  interceptor.amt = connection
 
-  const result = redirectInterceptor.handleAuthenticateSessionReply()
+  const result = interceptor.handleAuthenticateSessionReply()
   expect(result).toBe('')
   expect(connection.acc).toBe('0123456789')
 })
 
 test('authType === AuthenticationType.DIGEST && authstatus === AuthenticationStatus.FALIURE', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -519,27 +405,19 @@ test('authType === AuthenticationType.DIGEST && authstatus === AuthenticationSta
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
+  interceptor.amt = connection
 
   jest.spyOn(Common, 'ReadIntX').mockReturnValueOnce(0)
 
-  const result = redirectInterceptor.handleAuthenticateSessionReply()
+  const result = interceptor.handleAuthenticateSessionReply()
   expect(result).toBe(`0${String.fromCharCode(AuthenticationStatus.FALIURE)}00${String.fromCharCode(AuthenticationType.DIGEST)}AAAA`)
-  expect(redirectInterceptor.amt.acc).toBe(`${String.fromCharCode(2)}AA${String.fromCharCode(5)}AAAAA${String.fromCharCode(4)}AAAAAAAAA`)
-  expect(redirectInterceptor.amt.digestRealm).toBe('AA')
-  expect(redirectInterceptor.amt.digestNonce).toBe('AAAAA')
-  expect(redirectInterceptor.amt.digestQOP).toBe('AAAA')
+  expect(interceptor.amt.acc).toBe(`${String.fromCharCode(2)}AA${String.fromCharCode(5)}AAAAA${String.fromCharCode(4)}AAAAAAAAA`)
+  expect(interceptor.amt.digestRealm).toBe('AA')
+  expect(interceptor.amt.digestNonce).toBe('AAAAA')
+  expect(interceptor.amt.digestQOP).toBe('AAAA')
 })
 
 test('AuthenticationStatus.SUCCESS', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -556,30 +434,23 @@ test('AuthenticationStatus.SUCCESS', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = connection
+  interceptor.amt = connection
 
   jest.spyOn(Common, 'ReadIntX').mockReturnValueOnce(0)
 
-  const result = redirectInterceptor.handleAuthenticateSessionReply()
+  const result = interceptor.handleAuthenticateSessionReply()
 
   expect(result).toBe(`0${String.fromCharCode(AuthenticationStatus.SUCCESS)}00${String.fromCharCode(AuthenticationType.DIGEST)}AAAA`)
-  expect(redirectInterceptor.amt.acc).toBe(`${String.fromCharCode(2)}AA${String.fromCharCode(5)}AAAAA${String.fromCharCode(4)}AAAAAAAAA`)
-  expect(redirectInterceptor.amt.direct).toBeTruthy()
-  expect(redirectInterceptor.ws.direct).toBeTruthy()
+  expect(interceptor.amt.acc).toBe(`${String.fromCharCode(2)}AA${String.fromCharCode(5)}AAAAA${String.fromCharCode(4)}AAAAAAAAA`)
+  expect(interceptor.amt.direct).toBeTruthy()
+  expect(interceptor.ws.direct).toBeTruthy()
 })
 
 test('processAmtData', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-  const httpInterceptor = new RedirectInterceptor(args)
-  jest.spyOn(httpInterceptor, 'processBrowserDataEx').mockReturnValueOnce('hello world!!!')
+  const interceptor = new RedirectInterceptor(args)
+  jest.spyOn(interceptor, 'processBrowserDataEx').mockReturnValueOnce('hello world!!!')
 
-  const result = httpInterceptor.processBrowserData('12345')
+  const result = interceptor.processBrowserData('12345')
   expect(result).toBe('hello world!!!')
 })
 
@@ -609,13 +480,6 @@ test('processAmtData', () => {
 // }
 
 test('test header mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -632,24 +496,17 @@ test('test header mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
+  jest.spyOn(interceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
+  jest.spyOn(interceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
 
-  const result = redirectInterceptor.processBrowserDataEx()
+  const result = interceptor.processBrowserDataEx()
   expect(result).toBe('')
 })
 
 test('test direct mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -666,25 +523,18 @@ test('test direct mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
+  jest.spyOn(interceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
+  jest.spyOn(interceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
 
-  const result = redirectInterceptor.processBrowserDataEx()
+  const result = interceptor.processBrowserDataEx()
   expect(result).toBe('1234567890')
-  expect(redirectInterceptor.ws.acc).toBe('')
+  expect(interceptor.ws.acc).toBe('')
 })
 
 test('test handleStartRedirectionSession mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -701,24 +551,17 @@ test('test handleStartRedirectionSession mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
+  jest.spyOn(interceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
+  jest.spyOn(interceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
 
-  const result = redirectInterceptor.processBrowserDataEx()
+  const result = interceptor.processBrowserDataEx()
   expect(result).toBe('handleStartRedirectionSession')
 })
 
 test('test handleStartRedirectionSession mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -735,24 +578,17 @@ test('test handleStartRedirectionSession mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
+  jest.spyOn(interceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
+  jest.spyOn(interceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
 
-  const result = redirectInterceptor.processBrowserDataEx()
+  const result = interceptor.processBrowserDataEx()
   expect(result).toBe('handleEndRedirectionSession')
 })
 
 test('test handleAuthenticateSession mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -769,24 +605,17 @@ test('test handleAuthenticateSession mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
+  jest.spyOn(interceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
+  jest.spyOn(interceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
 
-  const result = redirectInterceptor.processBrowserDataEx()
+  const result = interceptor.processBrowserDataEx()
   expect(result).toBe('handleAuthenticateSession')
 })
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -803,15 +632,15 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
-  jest.spyOn(redirectInterceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
-  jest.spyOn(redirectInterceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
+  jest.spyOn(interceptor, 'handleStartRedirectionSession').mockReturnValueOnce('handleStartRedirectionSession')
+  jest.spyOn(interceptor, 'handleEndRedirectionSession').mockReturnValueOnce('handleEndRedirectionSession')
+  jest.spyOn(interceptor, 'handleAuthenticateSession').mockReturnValueOnce('handleAuthenticateSession')
 
-  const result = redirectInterceptor.processBrowserDataEx()
+  const result = interceptor.processBrowserDataEx()
   expect(result).toBe('')
-  expect(redirectInterceptor.ws.error).toBeTruthy()
+  expect(interceptor.ws.error).toBeTruthy()
 })
 
 // handleStartRedirectionSession (): string {
@@ -822,13 +651,6 @@ test('test default mode', () => {
 // }
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -845,21 +667,14 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
 
-  const result = redirectInterceptor.handleStartRedirectionSession()
+  const result = interceptor.handleStartRedirectionSession()
   expect(result).toBe('')
 })
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -876,22 +691,15 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
 
-  const result = redirectInterceptor.handleStartRedirectionSession()
+  const result = interceptor.handleStartRedirectionSession()
   expect(result).toBe('12345678')
-  expect(redirectInterceptor.ws.acc).toBe('')
+  expect(interceptor.ws.acc).toBe('')
 })
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -908,12 +716,12 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
 
-  const result = redirectInterceptor.handleStartRedirectionSession()
+  const result = interceptor.handleStartRedirectionSession()
   expect(result).toBe('12345678')
-  expect(redirectInterceptor.ws.acc).toBe('9')
+  expect(interceptor.ws.acc).toBe('9')
 })
 
 // handleEndRedirectionSession (): string {
@@ -924,13 +732,6 @@ test('test default mode', () => {
 // }
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -947,21 +748,14 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
 
-  const result = redirectInterceptor.handleEndRedirectionSession()
+  const result = interceptor.handleEndRedirectionSession()
   expect(result).toBe('')
 })
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -978,22 +772,15 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
 
-  const result = redirectInterceptor.handleEndRedirectionSession()
+  const result = interceptor.handleEndRedirectionSession()
   expect(result).toBe('1234')
-  expect(redirectInterceptor.ws.acc).toBe('')
+  expect(interceptor.ws.acc).toBe('')
 })
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -1010,12 +797,12 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
 
-  const result = redirectInterceptor.handleEndRedirectionSession()
+  const result = interceptor.handleEndRedirectionSession()
   expect(result).toBe('1234')
-  expect(redirectInterceptor.ws.acc).toBe('56789')
+  expect(interceptor.ws.acc).toBe('56789')
 })
 
 // handleAuthenticateSession (): string {
@@ -1077,13 +864,6 @@ test('test default mode', () => {
 // }
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -1100,21 +880,14 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
 
-  const result = redirectInterceptor.handleAuthenticateSession()
+  const result = interceptor.handleAuthenticateSession()
   expect(result).toBe('')
 })
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'Intel!123',
-    host: 'localhost',
-    port: 1234
-  }
-
   const connection: Connection = {
     type: ConnectionType.WS,
     mode: AmtMode.HEADER,
@@ -1131,23 +904,16 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.ws = connection
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.ws = connection
 
   jest.spyOn(Common, 'ReadIntX').mockReturnValueOnce(1)
 
-  const result = redirectInterceptor.handleAuthenticateSession()
+  const result = interceptor.handleAuthenticateSession()
   expect(result).toBe('')
 })
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'P@ssw0rd',
-    host: 'localhost',
-    port: 1234
-  }
-
   const amt: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -1180,9 +946,9 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = amt
-  redirectInterceptor.ws = ws
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.amt = amt
+  interceptor.ws = ws
 
   jest.spyOn(Common, 'ReadIntX').mockReturnValueOnce(1)
   jest.spyOn(Common, 'ComputeDigesthash').mockReturnValueOnce('digest')
@@ -1210,20 +976,13 @@ test('test default mode', () => {
   r += String.fromCharCode(amt.digestQOP.length) // QOP Length
   r += amt.digestQOP // QOP
 
-  const result = redirectInterceptor.handleAuthenticateSession()
+  const result = interceptor.handleAuthenticateSession()
   expect(result).toBe(r)
   expect(ws.acc).toBe('')
   expect(ws.authCNonceCount).toBe(nc + 1)
 })
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'P@ssw0rd',
-    host: 'localhost',
-    port: 1234
-  }
-
   const amt: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -1256,9 +1015,9 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = amt
-  redirectInterceptor.ws = ws
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.amt = amt
+  interceptor.ws = ws
 
   jest.spyOn(Common, 'ReadIntX').mockReturnValueOnce(1)
 
@@ -1272,19 +1031,12 @@ test('test default mode', () => {
   r += authurl
   r += String.fromCharCode(0x00, 0x00, 0x00, 0x00)
 
-  const result = redirectInterceptor.handleAuthenticateSession()
+  const result = interceptor.handleAuthenticateSession()
   expect(result).toBe(r)
   expect(ws.acc).toBe('')
 })
 
 test('test default mode', () => {
-  const args: Args = {
-    user: 'admin',
-    pass: 'P@ssw0rd',
-    host: 'localhost',
-    port: 1234
-  }
-
   const amt: Connection = {
     type: ConnectionType.AMT,
     mode: AmtMode.HEADER,
@@ -1317,13 +1069,13 @@ test('test default mode', () => {
     digestQOP: ''
   }
 
-  const redirectInterceptor = new RedirectInterceptor(args)
-  redirectInterceptor.amt = amt
-  redirectInterceptor.ws = ws
+  const interceptor = new RedirectInterceptor(args)
+  interceptor.amt = amt
+  interceptor.ws = ws
 
   jest.spyOn(Common, 'ReadIntX').mockReturnValueOnce(1)
 
-  const result = redirectInterceptor.handleAuthenticateSession()
+  const result = interceptor.handleAuthenticateSession()
   expect(result).toBe(`1234${String.fromCharCode(AuthenticationType.BADDIGEST)}56789`)
   expect(ws.acc).toBe('')
 })
